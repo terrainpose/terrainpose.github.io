@@ -22,6 +22,7 @@
       figure5.svg
       run1.mp4
 
+    To adjust width or spacing, search for LAYOUT CONTROLS in the CSS below.
     To change an image path, edit its img src and matching a href below.
     To change the video path, edit the video's src and its fallback link.
     All styles and scripts are embedded. Math uses native MathML, not a CDN.
@@ -40,7 +41,11 @@
       --line: #e4e7e1;
       --soft: #f5f6f3;
       --box: #f1f2f0;
-      --page-width: 920px;
+      /* LAYOUT CONTROLS: edit these values to adjust width and spacing. */
+      --page-width: 1120px;        /* Maximum content width on larger screens. */
+      --text-line-height: 1.2;     /* Line spacing inside body paragraphs and bullets. */
+      --paragraph-gap: 1em;       /* Gap between ordinary body paragraphs. */
+      --bullet-gap: 4px;         /* Gap between consecutive bullet points. */
       --nav-height: 57px;
     }
 
@@ -52,7 +57,7 @@
       color: var(--body);
       font-family: "Helvetica Neue", Arial, sans-serif;
       font-size: 18px;
-      line-height: 1.75;
+      line-height: var(--text-line-height);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
@@ -65,7 +70,7 @@
       border-radius: 3px;
     }
     strong { color: var(--ink); font-weight: 650; }
-    p { margin: 0 0 1.15em; }
+    p { margin: 0 0 var(--paragraph-gap); }
     p:last-child { margin-bottom: 0; }
     .container { width: min(var(--page-width), calc(100% - 48px)); margin-inline: auto; }
     .skip-link {
@@ -144,9 +149,9 @@
       color: var(--accent);
       font-size: 24px; line-height: 1.35; font-weight: 650; letter-spacing: -.25px;
     }
-    .intro { margin: 25px 0 34px; font-size: 19px; line-height: 1.8; }
+    .intro { margin: 25px 0 34px; font-size: 19px; line-height: var(--text-line-height); }
     .points { margin: 0; padding-left: 1.35em; }
-    .points > li { padding-left: .25em; margin: 0 0 15px; }
+    .points > li { padding-left: .25em; margin: 0 0 var(--bullet-gap); }
     .points > li:last-child { margin-bottom: 0; }
     .points > li::marker { color: var(--accent); font-size: 1.08em; }
     .points + .media { margin-top: 30px; }
@@ -200,9 +205,9 @@
     .conclusion-box {
       padding: 27px 30px 28px;
       border: 1px solid #e2e5de; border-left: 4px solid var(--accent); border-radius: 5px;
-      background: var(--box); font-size: 17.5px; line-height: 1.85;
+      background: var(--box); font-size: 17.5px; line-height: var(--text-line-height);
     }
-    .conclusion-box p + p { margin-top: 20px; }
+    .conclusion-box p + p { margin-top: var(--paragraph-gap); }
     .footer {
       padding: 16px 0 34px; border-top: 1px solid var(--line);
       text-align: center; color: var(--muted); font-size: 13px;
@@ -213,7 +218,7 @@
 
     @media (max-width: 680px) {
       :root { --nav-height: 86px; }
-      body { font-size: 16px; line-height: 1.75; }
+      body { font-size: 16px; line-height: var(--text-line-height); }
       .container { width: calc(100% - 36px); }
       .hero { padding: 39px 22px 25px; }
       .hero h1 { font-size: 29px; letter-spacing: -.65px; line-height: 1.28; }
@@ -226,7 +231,6 @@
       h2 { margin-bottom: 22px; font-size: 26px; }
       h3 { font-size: 22px; margin-top: 30px; }
       .intro { font-size: 17px; margin: 23px 0 27px; }
-      .points > li { margin-bottom: 13px; }
       .media { margin-bottom: 23px; }
       .media-placeholder { min-height: 200px; padding: 23px 16px; }
       .placeholder-title { font-size: 15px; }
@@ -234,7 +238,7 @@
       .equation-block { padding: 12px 8px 8px; margin-inline: -10px; }
       .equation-row { gap: 15px; padding-inline: 5px; }
       .equation-row math { font-size: 1.04em; }
-      .conclusion-box { padding: 21px 20px; font-size: 16px; line-height: 1.85; }
+      .conclusion-box { padding: 21px 20px; font-size: 16px; line-height: var(--text-line-height); }
     }
     @media (max-width: 370px) {
       .hero h1 { font-size: 25px; }
@@ -320,15 +324,8 @@
       <h2 id="problem-heading">Problem formulation</h2>
       <ul class="points">
         <li>
-          <strong>2D–3D Correspondence Estimation.</strong> First, we estimate correspondences between image pixels and points on the target surface to formulate <a class="equation-link" href="#eq-pnp">Eq. (1)</a>.
-          <div class="equation-block" id="eq-pnp">
-            <!-- Original LaTeX, with custom vector macros expanded:
-              \underset{R_{t,e},\mathbf{t}_{t,e}}{\operatorname{min}}\;
-              \sum_{i\in\mathcal{I}_{\mathrm{in}}}
-              \left\|\mathbf{x}_i^{2D}-\bar{\pi}\!\left(
-              R_{t,e}\mathbf{x}_i^{3D}+\mathbf{t}_{t,e}\right)\right\|_2^2.
-              The MathML below is its offline browser-rendered equivalent.
-            -->
+          <strong>2D–3D Correspondence Estimation.</strong> We estimate correspondences between image pixels and points on the target surface to formulate a reprojection-error minimization problem.</li>
+          <!-- <div class="equation-block" id="eq-pnp">
             <div class="equation-scroll" tabindex="0" role="region" aria-label="PnP objective; scroll horizontally on narrow screens">
               <div class="equation-row">
                 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Minimize over R sub t e and bold t sub t e: the sum over retained correspondences i of the squared Euclidean norm of x i 2D minus pi bar of R sub t e times x i 3D plus t sub t e.">
@@ -369,7 +366,7 @@
                 <span class="equation-number" aria-hidden="true">(1)</span>
               </div>
             </div>
-          </div>
+          </div> -->
         </li>
         <!-- The source referenced eq:terrain_corrected_pose but did not supply it.
              The sentence below describes the correction instead of inventing an equation. -->
