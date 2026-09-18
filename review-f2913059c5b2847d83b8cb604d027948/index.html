@@ -16,7 +16,9 @@
     Put these files in the SAME folder as index.html:
       figure1.svg
       figure_distillation.svg
+      student_network_figure.svg
       Student_network.svg
+      noc_resize_gif.gif
       Teacher_network.svg
       figure4.svg
       figure5.svg
@@ -31,6 +33,10 @@
     Design reference: https://seohong.me/projects/fql/
     This is an independently written page, not a copy of that site's source.
   -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@200..1000&amp;display=swap"
+    >
   <style>
     /* THEME: change this one value to change the accent throughout the page. */
     :root {
@@ -46,6 +52,8 @@
       --text-line-height: 1.2;     /* Line spacing inside body paragraphs and bullets. */
       --paragraph-gap: 1em;       /* Gap between ordinary body paragraphs. */
       --bullet-gap: 4px;         /* Gap between consecutive bullet points. */
+      /* GIF SIZE: maximum width of noc_resize_gif.gif; height adjusts automatically. */
+      --noc-gif-width: 700px;
       --nav-height: 57px;
     }
 
@@ -60,6 +68,9 @@
       line-height: var(--text-line-height);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+    }
+    h2, h3, h4, h5, h6 {
+      font-family: "Nunito", "Helvetica Neue", Arial, sans-serif;
     }
     [hidden] { display: none !important; }
     a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -141,13 +152,13 @@
     h2 {
       margin: 0 0 27px;
       color: var(--accent);
-      font-size: 30px; line-height: 1.3; font-weight: 650; letter-spacing: -.5px;
+      font-size: 40px; line-height: 1.3; font-weight: 350; letter-spacing: -.5px;
       text-wrap: balance;
     }
     h3 {
       margin: 39px 0 22px;
       color: var(--accent);
-      font-size: 24px; line-height: 1.35; font-weight: 650; letter-spacing: -.25px;
+      font-size: 24px; line-height: 1.35; font-weight: 350; letter-spacing: -.25px;
     }
     .intro { margin: 25px 0 34px; font-size: 19px; line-height: var(--text-line-height); }
     .points { margin: 0; padding-left: 1.35em; }
@@ -157,7 +168,7 @@
     .points + .media { margin-top: 30px; }
 
     /* Real figures retain their native aspect ratio: no crop or fixed image height. */
-    .media { margin: 0 0 28px; }
+    .media { margin: 0 auto 28px; max-width: 980px;}
     .media:last-child { margin-bottom: 0; }
     .figure-link { display: block; border-radius: 4px; }
     .media img { display: block; width: 100%; height: auto; border-radius: 3px; }
@@ -259,6 +270,67 @@
       .equation-scroll { overflow: visible; }
       .conclusion-box { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+    /* Size and placement of the overview SVG */
+    .overview-summary {
+      width: 100%;
+      max-width: 1100px;       /* Change this value to resize the box */
+      margin: 44px auto 44px;    /* Center horizontally */
+    }
+
+    .overview-summary img {
+      display: block;
+      width: 100%;
+      height: auto;          /* Preserve the SVG's proportions */
+    }
+
+    /* GIF SIZE AND SPACING: change --noc-gif-width above to resize only the GIF. */
+    .media.noc-animation {
+      width: 100%;
+      max-width: var(--noc-gif-width);
+      margin: 24px auto 24px;  /* Above / horizontal centering / below. */
+    }
+    .media.noc-animation img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* Inline pipeline disclosure: closed by default; no navigation on click. */
+    .pipeline-toggle {
+      margin: 24px 0 0;
+    }
+    .pipeline-toggle > summary {
+      width: fit-content;
+      max-width: 100%;
+      padding: 10px 0;
+      color: var(--accent);
+      font-weight: 600;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+    .pipeline-toggle > summary:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .pipeline-toggle > summary:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 5px;
+      border-radius: 3px;
+    }
+    .pipeline-toggle > .media {
+      width: 100%;
+      margin: 18px auto 0;
+    }
+    .media.figure1-media {
+      width: 100%;
+      max-width: 440px;     /* Change this number to resize Figure 1 */
+      margin-inline: auto; /* Keep centered; preserve existing vertical margins */
+    }
+    .media.distillation-media {
+      width: 100%;
+      max-width: 500px;     /* Change this number to resize Figure 1 */
+      margin-inline: auto; /* Keep centered; preserve existing vertical margins */
+    }
   </style>
 </head>
 <body>
@@ -296,7 +368,7 @@
 
     <!-- PAGE 1 / Overview -->
     <section class="page-section" id="overview" data-page="1" aria-labelledby="overview-heading">
-      <figure class="media" data-media="image">
+      <figure class="media figure1-media" data-media="image">
         <!-- LOCAL IMAGE: change both href and src if you move this file. -->
         <a class="figure-link" href="figure1.svg" target="_blank" rel="noopener" aria-label="Open the TerrainPose overview figure at full resolution">
           <img src="figure1.svg" alt="Overview of TerrainPose for long-range monocular relative pose estimation in autonomous racing." fetchpriority="high">
@@ -308,7 +380,39 @@
           <p class="placeholder-help">Local image not found. The path above is relative to index.html.</p>
         </div>
       </figure>
-      <p class="intro">TerrainPose is a learning-based pose estimation method that improves the robustness of long-range relative pose estimation by incorporating surrounding terrain geometry. Unlike existing methods, this procedure utilizes terrain geometry across the entire estimation pipeline.</p>
+      <!-- Overview text box: displayed immediately after figure1 -->
+      <!-- <figure class="media">
+        <a class="figure-link"
+           href="overview.svg"
+           target="_blank"
+           rel="noopener"
+           aria-label="Open the TerrainPose overview at full size">
+
+          <img src="overview.svg"
+               width="1191"
+               height="182"
+               alt="TerrainPose is a learning-based pose estimation method that improves the robustness of long-range relative pose estimation by incorporating surrounding terrain geometry. This procedure utilizes terrain geometry across the entire estimation pipeline.">
+        </a>
+      </figure> -->
+      <!-- NOC GIF: directly before the overview summary, without a clickable link.
+           Resize it using --noc-gif-width in the CSS LAYOUT CONTROLS. -->
+      <figure class="media noc-animation" data-media="image">
+        <img src="noc_resize_gif.gif" alt="NOC visualization animation." decoding="async">
+        <div class="media-placeholder" hidden>
+          <svg class="placeholder-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="5" width="24" height="22" rx="3"/><circle cx="11" cy="12" r="2"/><path d="m5 24 7-7 5 4 5-7 6 8"/></svg>
+          <span class="placeholder-title">NOC visualization animation</span>
+          <code data-missing-path>noc_resize_gif.gif</code>
+          <p class="placeholder-help">Local image not found. The path above is relative to index.html.</p>
+        </div>
+      </figure>
+      <!-- Overview: displayed as an image, not a link -->
+      <div class="overview-summary">
+        <img
+          src="overview.svg"
+          width="1191"
+          height="182"
+          alt="TerrainPose is a learning-based pose estimation method that improves the robustness of long-range relative pose estimation by incorporating surrounding terrain geometry. This procedure utilizes terrain geometry across the entire estimation pipeline.">
+      </div>
       <h2 id="overview-heading">Overview</h2>
       <!-- The user requested overview bullets without supplying their wording.
            These three editable bullets summarize the supplied method description. -->
@@ -373,7 +477,7 @@
         <li><strong>Pose Recovery with Terrain-Elevation Correction.</strong> The target pose is first estimated from the retained correspondences, and then its translation is corrected according to the terrain elevation map.</li>
         <li><strong>Knowledge distillation.</strong> TerrainPose is supervised using teacher-generated pose pseudo-labels for real-world images.</li>
       </ul>
-      <figure class="media" data-media="image">
+      <figure class="media distillation-media" data-media="image">
         <a class="figure-link" href="figure_distillation.svg" target="_blank" rel="noopener" aria-label="Open the knowledge-distillation figure at full resolution">
           <img src="figure_distillation.svg" alt="Teacher–student knowledge-distillation pipeline for adapting TerrainPose to real-world images." loading="lazy" decoding="async">
         </a>
@@ -390,13 +494,13 @@
     <section class="page-section" id="terrainpose" data-page="3" aria-labelledby="terrainpose-heading">
       <h2 id="terrainpose-heading">Idea: TerrainPose</h2>
       <figure class="media" data-media="image">
-        <a class="figure-link" href="Student_network.svg" target="_blank" rel="noopener" aria-label="Open the TerrainPose student-network figure at full resolution">
-          <img src="Student_network.svg" alt="TerrainPose student network: terrain–image features, wheel-contact prediction, rendered NOC refinement, and differentiable PnP." loading="lazy" decoding="async">
+        <a class="figure-link" href="student_network_figure.svg" target="_blank" rel="noopener" aria-label="Open the TerrainPose student-network figure at full resolution">
+          <img src="student_network_figure.svg" alt="TerrainPose student-network figure." loading="lazy" decoding="async">
         </a>
         <div class="media-placeholder" hidden>
           <svg class="placeholder-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="5" width="24" height="22" rx="3"/><circle cx="11" cy="12" r="2"/><path d="m5 24 7-7 5 4 5-7 6 8"/></svg>
           <span class="placeholder-title">TerrainPose student network</span>
-          <code data-missing-path>Student_network.svg</code>
+          <code data-missing-path>student_network_figure.svg</code>
           <p class="placeholder-help">Local image not found. The path above is relative to index.html.</p>
         </div>
       </figure>
@@ -406,6 +510,20 @@
         <li>This map is refined using RGB-NOC predictions and terrain-conditioned image features.</li>
         <li>During training, the differentiable EPro-PnP layer provides pose supervision for correspondence refinement.</li>
       </ul>
+
+      <!-- Detailed pipeline: click the same summary text to expand or collapse. -->
+      <details class="pipeline-toggle" id="terrainpose-pipeline">
+        <summary>Click to see the TerrainPose pipeline</summary>
+        <figure class="media pipeline-figure" data-media="image">
+          <img src="Student_network.svg" alt="TerrainPose student network: terrain–image features, wheel-contact prediction, rendered NOC refinement, and differentiable PnP." loading="lazy" decoding="async">
+          <div class="media-placeholder" hidden>
+            <svg class="placeholder-icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="5" width="24" height="22" rx="3"/><circle cx="11" cy="12" r="2"/><path d="m5 24 7-7 5 4 5-7 6 8"/></svg>
+            <span class="placeholder-title">TerrainPose student network</span>
+            <code data-missing-path>Student_network.svg</code>
+            <p class="placeholder-help">Local image not found. The path above is relative to index.html.</p>
+          </div>
+        </figure>
+      </details>
     </section>
 
     <!-- PAGE 4 / Teacher network -->
@@ -499,10 +617,12 @@
       const link = figure.querySelector('.figure-link');
       const placeholder = figure.querySelector('.media-placeholder');
       const path = image.getAttribute('src');
-      link.setAttribute('href', path);
+      // New inline-only media have no link; hide/show the image itself instead.
+      const displayedMedia = link || image;
+      if (link) link.setAttribute('href', path);
       placeholder.querySelector('[data-missing-path]').textContent = path;
       const setState = (loaded) => {
-        link.hidden = !loaded;
+        displayedMedia.hidden = !loaded;
         placeholder.hidden = loaded;
       };
       image.addEventListener('load', () => setState(true));
@@ -555,6 +675,8 @@
     window.addEventListener('scroll', requestNavigationUpdate, { passive: true });
     window.addEventListener('resize', requestNavigationUpdate);
     window.addEventListener('load', requestNavigationUpdate);
+    // Expanding/collapsing the pipeline changes section heights.
+    document.querySelector('.pipeline-toggle').addEventListener('toggle', requestNavigationUpdate);
     updateNavigation();
   </script>
 </body>
